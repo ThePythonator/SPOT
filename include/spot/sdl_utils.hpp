@@ -1,5 +1,6 @@
 #pragma once
 
+#include "graphics.hpp"
 #include "maths.hpp"
 
 #include <SDL3/SDL.h>
@@ -24,10 +25,12 @@ namespace spot::sdl {
 	SDLTexture load_texture(SDL_Renderer* renderer, const std::string& path);
 	float2 get_texture_size(SDL_Texture* texture);
 
+	float2 get_render_position(float2 position, float2 size, AnchorPosition anchor_position);
+	float2 get_render_position(frect rect, AnchorPosition anchor_position);
+	frect get_render_rect(float2 position, float2 size, AnchorPosition anchor_position);
+	frect get_render_rect(frect rect, AnchorPosition anchor_position);
+
 	void render_texture(SDL_Renderer* renderer, SDL_Texture* texture, frect source, frect dest);
 	//void render_texture(SDL_Renderer* renderer, SDL_Texture* texture, frect source, frect dest, SDL_FlipMode flip_mode);
 	void render_texture(SDL_Renderer* renderer, SDL_Texture* texture, frect source, frect dest, float angle, float2 center, SDL_FlipMode flip_mode);
-
-	// TODO: consider moving into maths.hpp
-	SDL_FRect to_sdl_rect(frect rect);
 }

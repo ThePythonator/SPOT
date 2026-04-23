@@ -1,5 +1,7 @@
 #include <spot/graphics_context.hpp>
 
+#include <SDL3_ttf/SDL_ttf.h>
+
 #include <format>
 #include <stdexcept>
 
@@ -21,7 +23,19 @@ namespace spot {
 		SDL_WindowFlags flags = 0;
 		if (!SDL_CreateWindowAndRenderer(title.c_str(), screen_size.x, screen_size.y, flags, &window, &renderer)) {
 			SDL_Quit();
+
 			std::string error_message = std::format("Window could not be created! SDL error: {}", SDL_GetError());
+			SDL_Log("%s\n", error_message.c_str());
+			throw std::runtime_error(error_message);
+		}
+
+		if (!TTF_Init()) {
+			// TODO: can I make this tidier?
+			if (renderer) SDL_DestroyRenderer(renderer);
+			if (window) SDL_DestroyWindow(window);
+			SDL_Quit();
+
+			std::string error_message = std::format("SDL_ttf could not initialise! SDL error: {}", SDL_GetError());
 			SDL_Log("%s\n", error_message.c_str());
 			throw std::runtime_error(error_message);
 		}
@@ -33,6 +47,7 @@ namespace spot {
 		if (renderer) SDL_DestroyRenderer(renderer);
 		if (window) SDL_DestroyWindow(window);
 
+		TTF_Quit();
 		SDL_Quit();
 		instance = nullptr;
 	}
@@ -48,7 +63,7 @@ namespace spot {
 		return instance;
 	}
 
-	void GraphicsContext::clear(const Colour& fill_colour) {
+	void GraphicsContext::clear(Colour fill_colour) {
 		SDL_SetRenderDrawColor(renderer, fill_colour.r, fill_colour.g, fill_colour.b, fill_colour.a);
 		SDL_RenderClear(renderer);
 	}

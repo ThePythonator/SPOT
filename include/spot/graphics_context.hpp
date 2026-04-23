@@ -11,9 +11,9 @@
 #include <string>
 
 namespace spot {
+	// Handles initialisation and management of the rendering systems
 	class GraphicsContext {
 	public:
-
 		GraphicsContext(const std::string& title, uint2 screen_size);
 		~GraphicsContext();
 
@@ -29,7 +29,7 @@ namespace spot {
 		SDL_Renderer* get_renderer() { return renderer; }
 		SDL_Window* get_window() { return window; }
 
-		void clear(const Colour& fill_colour);
+		void clear(Colour fill_colour);
 
 		void render_texture(SDL_Texture* texture, frect source, frect dest);
 		void render_texture(SDL_Texture* texture, frect source, frect dest, const RenderTransform& transform);

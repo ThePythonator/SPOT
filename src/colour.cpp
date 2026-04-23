@@ -8,4 +8,8 @@ namespace spot {
 		, a(a) {
 
 	}
+
+	SDL_Color Colour::to_sdl() {
+		return { r, g, b, a };
+	}
 }
